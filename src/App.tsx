@@ -44,6 +44,18 @@ function SpaceCanvas() {
   return <canvas ref={ref} className="space-canvas" aria-hidden="true" />;
 }
 
+function InteractionLayer() {
+  useEffect(() => {
+    if (window.matchMedia("(max-width: 760px), (prefers-reduced-motion: reduce)").matches) return;
+    const glow = document.createElement("div"); glow.className = "pointer-glow"; document.body.appendChild(glow);
+    const move = (event: MouseEvent) => { glow.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`; };
+    const click = (event: MouseEvent) => { const ripple = document.createElement("span"); ripple.className = "click-ripple"; ripple.style.left = `${event.clientX}px`; ripple.style.top = `${event.clientY}px`; document.body.appendChild(ripple); window.setTimeout(() => ripple.remove(), 650); };
+    window.addEventListener("mousemove", move); window.addEventListener("click", click);
+    return () => { window.removeEventListener("mousemove", move); window.removeEventListener("click", click); glow.remove(); };
+  }, []);
+  return null;
+}
+
 function Reveal({
   children,
   className = "",
@@ -159,6 +171,7 @@ function Hero() {
         </div>
       </Reveal>
       <Reveal className="hero-art">
+        <div className="hero-image-slot image-slot"><img src="/images/hero-main.webp" alt="" onError={(event) => { event.currentTarget.style.display = "none"; }} /></div>
         <div className="orbit orbit-one" />
         <div className="orbit orbit-two" />
         <div className="art-cross cross-one">+</div>
@@ -211,11 +224,18 @@ function Hero() {
   );
 }
 
+const showcaseImages = Array.from({ length: 6 }, (_, index) => `/images/showcase-0${index + 1}.webp`);
+function Showcase() {
+  const [preview, setPreview] = useState<string | null>(null);
+  const rows = [showcaseImages, [...showcaseImages].reverse()];
+  return <section className="showcase-section" aria-label="视觉展示"><div className="showcase-heading container"><span className="eyebrow">SELECTED VISUALS / 视觉展示</span><p>一些游戏、技术与资源的视觉片段。</p></div>{rows.map((row, rowIndex) => <div className={`showcase-row showcase-row-${rowIndex}`} key={rowIndex}><div className="showcase-track">{[...row, ...row].map((src, index) => <button className="showcase-item image-slot" key={`${src}-${index}`} onClick={() => setPreview(src)} aria-label={`预览展示图片 ${index + 1}`}><img src={src} alt="展示图片" loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} /><span>0{(index % 6) + 1}</span></button>)}</div></div>)}{preview && <div className="image-modal" role="dialog" aria-modal="true" onClick={() => setPreview(null)}><button aria-label="关闭图片预览" onClick={() => setPreview(null)}><X /></button><img src={preview} alt="展示图片预览" onError={(event) => { event.currentTarget.style.display = "none"; }} /></div>}</section>;
+}
+
 function About() {
   return (
     <section id="about" className="container about">
       <Reveal className="about-inner">
-        <div>
+        <div className="about-visual image-slot"><img src="/images/avatar.webp" alt="个人头像占位" onError={(event) => { event.currentTarget.style.display = "none"; }} /><span>{config.logoText}</span></div><div>
           <span className="eyebrow">ABOUT / 关于我</span>
           <h2>{config.aboutTitle}</h2>
         </div>
@@ -370,7 +390,6 @@ function Resources() {
             />
           </label>
         </div>
-        <FeaturedResource resources={activeResources} />
         <div className="resource-count" role="status">
           {category} · {filtered.length} 项资源
         </div>
@@ -386,7 +405,7 @@ function Resources() {
                     ? Wrench
                     : FileText;
             return (
-              <article className="resource-card" key={resource.id}>
+              <article className={`resource-card${resource.featured ? " resource-featured" : ""}`} key={resource.id}>
                 <div className="resource-top">
                   <Icon size={24} />
                   <span>{resource.category}</span>
@@ -423,11 +442,12 @@ function Resources() {
   );
 }
 
-function FeaturedResource({ resources }: { resources: Resource[] }) {
-  const resource = resources.find((item) => item.featured);
+function CurrentGame() {
+  const resources = (resourcesData as Resource[]).filter((resource) => resource.enabled && resource.currentGame);
+  const resource = resources[0];
   if (!resource) return null;
   const url = safeUrl(resource.url);
-  return <div className="featured-resource"><div><span className="eyebrow"><span className="status-dot" /> 正在运行</span><h3>{resource.title}</h3><p>{resource.description}</p></div>{url ? <a className="button primary" href={url} target="_blank" rel="noopener noreferrer">立即下载 <ArrowUpRight size={17} /></a> : <button className="button secondary" disabled>暂未提供 <Download size={17} /></button>}</div>;
+  return <section className="current-game-section"><div className="section container"><Reveal><div className="current-game"><div className="current-game-cover image-slot"><img src="/images/current-game-cover.webp" alt="" loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} /><span className="game-cover-mark">{resource.title.slice(0, 1)}</span></div><div className="current-game-copy"><span className="eyebrow"><span className="status-dot" /> 正在运行</span><h2>{resource.title}</h2><p>{resource.description}</p><div className="game-shots">{[1, 2].map((number) => <div className="game-shot image-slot" key={number}><img src={`/images/current-game-0${number}.webp`} alt={`${resource.title}截图 ${number}`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} /></div>)}</div>{url ? <a className="button primary" href={url} target="_blank" rel="noopener noreferrer">立即下载 <ArrowUpRight size={17} /></a> : <button className="button secondary" disabled>暂未提供 <Download size={17} /></button>}</div></div></Reveal></div></section>;
 }
 
 function Recommendations() {
@@ -533,16 +553,19 @@ export default function App() {
   }, []);
   return (
     <MotionConfig reducedMotion="user">
+      <InteractionLayer />
       <a className="skip-link" href="#services">
         跳到服务内容
       </a>
       <Header />
       <main>
         <Hero />
+        <Showcase />
         <About />
         <Services />
         <Recommendations />
         <Resources />
+        <CurrentGame />
         <Contact />
       </main>
       <Footer />

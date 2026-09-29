@@ -135,7 +135,7 @@ export const siteConfig = {
   },
   contacts: [
     { label: "QQ", value: "751260524" },
-    { label: "微信", value: "shirenziyuanzhan" },
+    { label: "微信", value: "shirenziyuan" },
     { label: "QQ群", value: "784662149" },
   ],
   contactHint: "添加时请简单说明需要的服务，方便沟通。",

@@ -26,6 +26,20 @@ npm run preview
 
 修改 `src/data/siteConfig.ts` 中的网站名称、昵称、介绍、价格、联系方式和推荐入口。资源已独立到 `src/data/resources.json`。
 
+## 图片插槽
+
+图片统一放在 `public/images/`，不放图时会自动显示渐变占位，不会出现破图。可直接替换以下同名文件：
+
+```text
+hero-main.webp
+showcase-01.webp … showcase-06.webp
+current-game-cover.webp
+current-game-01.webp
+current-game-02.webp
+avatar.webp
+service-cover.webp
+```
+
 新增资源只需在 `resources` 数组中增加对象：
 
 ```ts
@@ -33,6 +47,8 @@ npm run preview
 ```
 
 `id` 必须唯一。支持教程、工具、游戏、软件、学习资料、其他。`enabled: false` 会暂时下架但保留数据；`featured: true` 会显示在资源区的“正在运行”推荐区域。空链接或无效链接显示禁用的“暂未提供”；填写完整的 https 网盘分享地址后显示“立即下载”。页面有分类和搜索，搜索标题、简介和分类。联系方式点击复制，QQ群没有分享链接时显示群号并可复制。
+
+`currentGame: true` 才会进入“正在运行”区域，和 `featured` 完全分开。建议同时只保留一个当前运行游戏；更换时把旧条目的 `currentGame` 改为 `false`，再把新条目改为 `true`。
 
 ## 本机资源管理器
 
