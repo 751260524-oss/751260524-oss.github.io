@@ -1,11 +1,3 @@
-export type Category = "教程" | "工具" | "游戏" | "软件" | "学习资料" | "其他";
-export interface Resource {
-  id: string;
-  title: string;
-  category: Category;
-  description: string;
-  url: string;
-}
 export interface Service {
   id: string;
   title: string;
@@ -15,6 +7,11 @@ export interface Service {
   features: string[];
   note?: string;
   formats?: string[];
+}
+export type Category = "教程" | "工具" | "游戏" | "软件" | "学习资料" | "其他";
+export interface Resource {
+  id: string; title: string; category: Category; description: string; url: string;
+  enabled: boolean; featured: boolean; currentGame?: boolean;
 }
 
 export const siteConfig = {
@@ -26,10 +23,12 @@ export const siteConfig = {
     "专注传奇相关搭建、客户端修改、分发服务、CDK 后台对接以及游戏资源整理。让想法落地，让资源触手可及。",
   heroEyebrow: "游戏 · 技术 · 分享",
   heroTags: ["服务端搭建", "客户端修改", "游戏资源整理"],
+  resourceCategories: ["教程", "工具", "游戏", "软件", "学习资料", "其他"] as Category[],
   nav: [
     { id: "home", label: "首页" },
     { id: "services", label: "服务" },
     { id: "resources", label: "资源" },
+    { id: "recommendations", label: "推荐" },
     { id: "contact", label: "联系我" },
   ],
   aboutTitle: "专注游戏，也关注每个具体需求。",
@@ -55,8 +54,9 @@ export const siteConfig = {
       title: "好用的资源，一起分享。",
       description: "教程、工具与游戏资料，按需查找，通过网盘获取。",
     },
+    recommendations: { eyebrow: "03 / RECOMMENDED", title: "合作入口，按需了解。", description: "两个实用的合作入口，放在这里，保持清晰也保持克制。" },
     contact: {
-      eyebrow: "03 / CONTACT",
+      eyebrow: "04 / CONTACT",
       title: "有需要，直接联系我。",
       description:
         "传奇搭建、修改、分发、CDK 后台对接以及其他游戏资源需求，都可以直接联系。",
@@ -133,63 +133,17 @@ export const siteConfig = {
       "赞助会员可以免费获得一次搭建服务。另外可以免费帮忙寻找游戏资源、软件和学习资料。",
     range: "FC → PS → PS5",
   },
-  resourceCategories: [
-    "教程",
-    "工具",
-    "游戏",
-    "软件",
-    "学习资料",
-    "其他",
-  ] as Category[],
-  resources: [
-    {
-      id: "legend-tutorial",
-      title: "传奇搭建教程",
-      category: "教程",
-      description: "传奇服务端搭建相关教程，从基础开始了解搭建流程。",
-      url: "",
-    },
-    {
-      id: "web-tutorial",
-      title: "网站设计教程",
-      category: "教程",
-      description: "整理网站设计与页面搭建的相关教程。",
-      url: "",
-    },
-    {
-      id: "apk-tools",
-      title: "APK 修改工具",
-      category: "工具",
-      description: "用于 APK 文件处理与客户端修改的相关工具。",
-      url: "",
-    },
-    {
-      id: "game-client",
-      title: "游戏客户端与资源",
-      category: "游戏",
-      description: "游戏客户端及相关游戏资源整理。",
-      url: "",
-    },
-    {
-      id: "software",
-      title: "实用软件",
-      category: "软件",
-      description: "日常使用与文件处理相关的实用软件。",
-      url: "",
-    },
-    {
-      id: "learning",
-      title: "学习资料",
-      category: "学习资料",
-      description: "技术学习资料与参考内容，持续整理。",
-      url: "",
-    },
-  ] satisfies Resource[],
   contacts: [
     { label: "QQ", value: "751260524" },
     { label: "微信", value: "shirenziyuanzhan" },
+    { label: "QQ群", value: "784662149" },
   ],
   contactHint: "添加时请简单说明需要的服务，方便沟通。",
+  qqGroupUrl: "",
+  partnerships: [
+    { id: "tuofeiyun", title: "拓飞云", eyebrow: "服务器 / 云服务器", description: "可用于网站、游戏服务端、传奇服务器和其他项目。", action: "立即购买", url: "https://www.tuofeiyun.cn/aff/XQNGLURP" },
+    { id: "cocok", title: "酷客游戏", eyebrow: "游戏相关服务", description: "其他游戏可以在这里购买，也可以联系我低价购入和包站。", action: "进入酷客游戏", url: "https://game.cocok.cn/?ref=4R0D86SO" },
+  ],
   externalLinks: [
     { title: "拓飞云", url: "https://www.tuofeiyun.cn/aff/XQNGLURP" },
     { title: "酷客游戏", url: "https://game.cocok.cn/?ref=4R0D86SO" },

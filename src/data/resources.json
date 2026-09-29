@@ -1,0 +1,66 @@
+[
+  {
+    "id": "current-game",
+    "title": "当前运行游戏",
+    "category": "游戏",
+    "description": "当前正在运行的游戏客户端下载，具体游戏名称与简介待补充。",
+    "url": "",
+    "enabled": true,
+    "featured": true,
+    "currentGame": true
+  },
+  {
+    "id": "legend-tutorial",
+    "title": "传奇搭建教程",
+    "category": "教程",
+    "description": "传奇服务端搭建相关教程，从基础开始了解搭建流程。",
+    "url": "",
+    "enabled": true,
+    "featured": false
+  },
+  {
+    "id": "web-tutorial",
+    "title": "网站设计教程",
+    "category": "教程",
+    "description": "整理网站设计与页面搭建的相关教程。",
+    "url": "",
+    "enabled": true,
+    "featured": false
+  },
+  {
+    "id": "apk-tools",
+    "title": "APK 修改工具",
+    "category": "工具",
+    "description": "用于 APK 文件处理与客户端修改的相关工具。",
+    "url": "",
+    "enabled": true,
+    "featured": false
+  },
+  {
+    "id": "game-client",
+    "title": "游戏客户端与资源",
+    "category": "游戏",
+    "description": "游戏客户端及相关游戏资源整理。",
+    "url": "",
+    "enabled": true,
+    "featured": false
+  },
+  {
+    "id": "software",
+    "title": "实用软件",
+    "category": "软件",
+    "description": "日常使用与文件处理相关的实用软件。",
+    "url": "",
+    "enabled": true,
+    "featured": false
+  },
+  {
+    "id": "learning",
+    "title": "学习资料",
+    "category": "学习资料",
+    "description": "技术学习资料与参考内容，持续整理。",
+    "url": "",
+    "enabled": true,
+    "featured": false
+  }
+]

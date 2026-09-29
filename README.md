@@ -24,17 +24,23 @@ npm run preview
 
 ## 修改内容
 
-修改 `src/data/siteConfig.ts` 中的网站名称、昵称、介绍、价格、联系方式和链接。网页标题和描述自动读取配置。
+修改 `src/data/siteConfig.ts` 中的网站名称、昵称、介绍、价格、联系方式和推荐入口。资源已独立到 `src/data/resources.json`。
 
 新增资源只需在 `resources` 数组中增加对象：
 
 ```ts
-{ id: 'unique-resource-id', title: '资源名称', category: '教程', description: '一句话说明', url: '' }
+{ "id": "unique-resource-id", "title": "资源名称", "category": "教程", "description": "一句话说明", "url": "", "enabled": true, "featured": false }
 ```
 
-`id` 必须唯一。支持教程、工具、游戏、软件、学习资料、其他。删除对象即删除资源；资源数量没有固定限制。空链接或无效链接显示禁用的“暂未提供”；填写完整的 https 网盘分享地址后显示“立即下载”。页面有分类和搜索。联系方式点击复制，复制受浏览器限制时可手动选中号码。
+`id` 必须唯一。支持教程、工具、游戏、软件、学习资料、其他。`enabled: false` 会暂时下架但保留数据；`featured: true` 会显示在资源区的“正在运行”推荐区域。空链接或无效链接显示禁用的“暂未提供”；填写完整的 https 网盘分享地址后显示“立即下载”。页面有分类和搜索，搜索标题、简介和分类。联系方式点击复制，QQ群没有分享链接时显示群号并可复制。
 
-服务分发价格已确认采用 60元/月、130元/年、200元/无限时长。
+## 本机资源管理器
+
+打开 `tools/resource-manager/index.html`（建议使用最新版 Edge 或 Chrome）。点击“打开 resources.json”，选择项目中的 `src/data/resources.json`。管理器支持新增、编辑、搜索、分类筛选、复制链接、下架/恢复和删除；点击“保存到 JSON”才会写回文件。保存后重新运行构建并推送，网站会自动显示更新。
+
+管理器使用浏览器 File System Access API，只在本机读写你明确选择的文件，没有登录、数据库或服务器后台。浏览器不支持该 API 时可直接编辑 JSON。
+
+服务分发价格已确认采用 60元/月、130元/年、200元/无限时长。页面包含拓飞云和酷客游戏的独立合作入口，以及 751260524、shirenziyuanzhan、784662149 三个联系方式。
 
 ## GitHub Pages
 

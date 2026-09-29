@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { motion, MotionConfig, useReducedMotion } from "framer-motion";
 import {
@@ -26,7 +26,23 @@ import {
   FileText,
 } from "lucide-react";
 import { siteConfig as config } from "./data/siteConfig";
-import type { Service } from "./data/siteConfig";
+import resourcesData from "./data/resources.json";
+import type { Resource, Service } from "./data/siteConfig";
+import * as THREE from "three";
+
+function SpaceCanvas() {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    const canvas = ref.current; if (!canvas) return;
+    const mobile = window.matchMedia("(max-width: 760px)").matches; const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false, powerPreference: "low-power" }); const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(55,1,.1,100); camera.position.z=8;
+    const count = mobile ? 380 : 1700; const positions = new Float32Array(count*3); const colors = new Float32Array(count*3);
+    for(let i=0;i<count;i++){const r=2.5+Math.random()*5.5,t=Math.random()*Math.PI*2,p=Math.acos(2*Math.random()-1);positions[i*3]=r*Math.sin(p)*Math.cos(t);positions[i*3+1]=r*Math.cos(p);positions[i*3+2]=r*Math.sin(p)*Math.sin(t);colors[i*3]=.35+Math.random()*.35;colors[i*3+1]=.45+Math.random()*.4;colors[i*3+2]=.85+Math.random()*.15;}
+    const geometry=new THREE.BufferGeometry(); geometry.setAttribute("position",new THREE.BufferAttribute(positions,3));geometry.setAttribute("color",new THREE.BufferAttribute(colors,3));const material=new THREE.PointsMaterial({size:mobile?.025:.035,vertexColors:true,transparent:true,opacity:.7,blending:THREE.AdditiveBlending,depthWrite:false});const points=new THREE.Points(geometry,material);scene.add(points);
+    const resize=()=>{const w=canvas.clientWidth||1,h=canvas.clientHeight||1;renderer.setPixelRatio(Math.min(devicePixelRatio,mobile?1.2:1.6));renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};resize();window.addEventListener("resize",resize);let raf=0;const pointer={x:0,y:0};const move=(e:MouseEvent)=>{pointer.x=(e.clientX/innerWidth-.5)*.2;pointer.y=(e.clientY/innerHeight-.5)*.2};window.addEventListener("mousemove",move);const animate=()=>{points.rotation.y+=reduced?.0002:.0007;points.position.x+=(pointer.x-points.position.x)*.008;points.position.y+=(pointer.y-points.position.y)*.008;renderer.render(scene,camera);raf=requestAnimationFrame(animate)};animate();return()=>{cancelAnimationFrame(raf);window.removeEventListener("resize",resize);window.removeEventListener("mousemove",move);geometry.dispose();material.dispose();renderer.dispose()};
+  }, []);
+  return <canvas ref={ref} className="space-canvas" aria-hidden="true" />;
+}
 
 function Reveal({
   children,
@@ -98,6 +114,7 @@ function Header() {
 function Hero() {
   return (
     <section id="home" className="hero container">
+      <SpaceCanvas />
       <div className="hero-glow" aria-hidden="true" />
       <div className="particles" aria-hidden="true">
         {Array.from({ length: 14 }, (_, i) => (
@@ -316,10 +333,11 @@ function safeUrl(url: string) {
 function Resources() {
   const [category, setCategory] = useState("全部");
   const [query, setQuery] = useState("");
-  const filtered = config.resources.filter(
+  const activeResources = (resourcesData as Resource[]).filter((resource) => resource.enabled);
+  const filtered = activeResources.filter(
     (resource) =>
       (category === "全部" || resource.category === category) &&
-      `${resource.title} ${resource.description}`
+      `${resource.title} ${resource.description} ${resource.category}`
         .toLowerCase()
         .includes(query.trim().toLowerCase()),
   );
@@ -352,6 +370,7 @@ function Resources() {
             />
           </label>
         </div>
+        <FeaturedResource resources={activeResources} />
         <div className="resource-count" role="status">
           {category} · {filtered.length} 项资源
         </div>
@@ -404,6 +423,17 @@ function Resources() {
   );
 }
 
+function FeaturedResource({ resources }: { resources: Resource[] }) {
+  const resource = resources.find((item) => item.featured);
+  if (!resource) return null;
+  const url = safeUrl(resource.url);
+  return <div className="featured-resource"><div><span className="eyebrow"><span className="status-dot" /> 正在运行</span><h3>{resource.title}</h3><p>{resource.description}</p></div>{url ? <a className="button primary" href={url} target="_blank" rel="noopener noreferrer">立即下载 <ArrowUpRight size={17} /></a> : <button className="button secondary" disabled>暂未提供 <Download size={17} /></button>}</div>;
+}
+
+function Recommendations() {
+  return <section id="recommendations" className="section container recommendations"><Reveal><SectionHeading section="recommendations" /></Reveal><div className="recommendation-grid">{config.partnerships.map((item) => <Reveal key={item.id} className="recommendation-card"><span className="eyebrow">{item.eyebrow}</span><h3>{item.title}</h3><p>{item.description}</p><a href={item.url} target="_blank" rel="noopener noreferrer" className="service-link">{item.action} <ExternalLink size={16} /></a></Reveal>)}</div></section>;
+}
+
 function Contact() {
   const [feedback, setFeedback] = useState("");
   async function copy(label: string, value: string) {
@@ -441,6 +471,7 @@ function Contact() {
               </button>
             </div>
           ))}
+          {config.qqGroupUrl ? <a className="group-link" href={config.qqGroupUrl} target="_blank" rel="noopener noreferrer">加入QQ群 <ArrowUpRight size={16} /></a> : <p className="group-hint">QQ群暂未提供分享链接，可复制群号加入：784662149</p>}
           <p className="copy-status" role="status">
             {feedback || "点击右侧图标复制联系方式"}
           </p>
@@ -510,6 +541,7 @@ export default function App() {
         <Hero />
         <About />
         <Services />
+        <Recommendations />
         <Resources />
         <Contact />
       </main>
