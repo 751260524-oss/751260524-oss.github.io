@@ -18,3 +18,6 @@ playwright-report/
 # Original planning documents stay local.
 Codex_个人工作介绍网站设计需求.md
 Codex_个人工作介绍网站设计需求.docx
+
+# Local source image library (processed copies live in public/images/)
+图片资源/
