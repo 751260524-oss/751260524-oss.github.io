@@ -18,9 +18,9 @@ export const siteConfig = {
   siteName: "个人服务站",
   nickname: "游戏服务与资源",
   logoText: "S",
-  heroTitle: ["传奇游戏搭建", "修改 · 资源服务"],
+  heroTitle: ["游戏搭建服务", "修改 · 资源服务"],
   heroSubtitle:
-    "专注传奇相关搭建、客户端修改、分发服务、CDK 后台对接以及游戏资源整理。让想法落地，让资源触手可及。",
+    "专注各类游戏搭建、客户端修改、分发服务、CDK 后台对接以及游戏资源整理。让想法落地，让资源触手可及。",
   heroEyebrow: "游戏 · 技术 · 分享",
   heroTags: ["服务端搭建", "客户端修改", "游戏资源整理"],
   resourceCategories: ["教程", "工具", "游戏", "软件", "学习资料", "其他"] as Category[],
@@ -35,7 +35,7 @@ export const siteConfig = {
   aboutText:
     "我主要做传奇相关的游戏服务，包括服务端搭建、客户端修改、传奇商业服一条龙、文件分发以及 CDK 后台对接。同时也会整理和寻找各种游戏资源、软件以及学习资料，并提供其他游戏相关服务。",
   aboutTags: [
-    "传奇服务端搭建",
+    "游戏服务端搭建",
     "客户端修改",
     "APK / 游戏文件处理",
     "商业服一条龙",
@@ -59,13 +59,13 @@ export const siteConfig = {
       eyebrow: "04 / CONTACT",
       title: "有需要，直接联系我。",
       description:
-        "传奇搭建、修改、分发、CDK 后台对接以及其他游戏资源需求，都可以直接联系。",
+        "游戏搭建、修改、分发、CDK 后台对接以及其他游戏资源需求，都可以直接联系。",
     },
   },
   services: [
     {
       id: "build",
-      title: "传奇搭建服务",
+      title: "游戏搭建服务",
       subtitle: "从搭建到一起开玩",
       prices: [{ amount: "50～200", unit: "元" }],
       description:
