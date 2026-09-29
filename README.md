@@ -1,5 +1,9 @@
 # 个人服务站
 
+网站：https://751260524-oss.github.io/
+
+仓库：https://github.com/751260524-oss/751260524-oss.github.io
+
 React + TypeScript + Vite + Tailwind CSS + Framer Motion + lucide-react。无需图片素材，所有大文件通过外部网盘提供。
 
 ## 本地运行
@@ -56,4 +60,4 @@ git push
 - https://docs.github.com/en/pages/quickstart
 - https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
 
-远程仓库与首次发布需要实际 GitHub 用户名和账号授权。仅准备工作流不代表已上线。
+已为本机仓库设置 Git HTTP 代理 `http://127.0.0.1:7890`，沿用现有系统代理以完成推送；没有修改全局 Git 设置。如果以后不使用该代理，可运行 `git config --local --unset http.proxy`。
