@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.local
+*.log
+*.tsbuildinfo
+.cache/
+.vite/
+.DS_Store
+.idea/
+.vscode/
+test-results/
+playwright-report/
+*.pem
+*.key
+# Original planning documents stay local.
+Codex_个人工作介绍网站设计需求.md
+Codex_个人工作介绍网站设计需求.docx
